@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Music Hub - Connect All Your Music</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --spotify-green: #1db954;
+            --apple-music-red: #fc3c44;
+            --youtube-red: #ff0000;
+            --soundcloud-orange: #ff5500;
+            --tidal-cyan: #00b4d8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo i {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        nav a.active {
+            color: var(--primary-color);
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .notification-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent-color);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .platform-icons {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .platform-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            animation: float 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .platform-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .platform-icon.spotify {
+            background: var(--spotify-green);
+            animation-delay: 0s;
+        }
+
+        .platform-icon.apple {
+            background: var(--apple-music-red);
+            animation-delay: 0.2s;
+        }
+
+        .platform-icon.youtube {
+            background: var(--youtube-red);
+            animation-delay: 0.4s;
+        }
+
+        .platform-icon.soundcloud {
+            background: var(--soundcloud-orange);
+            animation-delay: 0.6s;
+        }
+
+        .platform-icon.tidal {
+            background: var(--tidal-cyan);
+            animation-delay: 0.8s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Platform Connections Section */
+        .platform-connections {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .connection-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .connection-card.connected {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+        }
+
+        .connection-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .connection-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .connection-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .connection-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .connection-logo.spotify { background: var(--spotify-green); }
+        .connection-logo.apple { background: var(--apple-music-red); }
+        .connection-logo.youtube { background: var(--youtube-red); }
+        .connection-logo.soundcloud { background: var(--soundcloud-orange); }
+        .connection-logo.tidal { background: var(--tidal-cyan); }
+
+        .connection-name h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .connection-name p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+        }
+
+        .status-dot.connected {
+            background: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .connection-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-item i {
+            color: var(--success-color);
+        }
+
+        .connection-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .btn-connect {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-connect.connect {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-connect.disconnect {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-connect:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Sync Dashboard */
+        .sync-dashboard {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .sync-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .sync-header h3 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            color: var(--success-color);
+            font-size: 0.9rem;
+        }
+
+        .sync-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--dark-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .sync-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Import/Export Section */
+        .import-export {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+        }
+
+        .import-export-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .transfer-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .transfer-box {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 2px dashed var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .transfer-box.active {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .transfer-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .transfer-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .transfer-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .platform-select {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .transfer-arrow {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        /* Music Discovery Section */
+        .music-discovery {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .discovery-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .music-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .music-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .music-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .platform-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .platform-badge.spotify { background: var(--spotify-green); }
+        .platform-badge.apple { background: var(--apple-music-red); }
+        .platform-badge.youtube { background: var(--youtube-red); }
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .music-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .music-card-info {
+            padding: 1rem;
+        }
+
+        .music-card-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-card-artist {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* AI Assistant Section */
+        .ai-assistant {
+            padding: 3rem 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin: 2rem auto;
+            max-width: 1400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .assistant-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .assistant-header h2 {
+            font-size: 1.8rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .ai-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .chat-container {
+            background: var(--dark-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding-right: 0.5rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .message.ai .message-avatar {
+            background: var(--gradient);
+        }
+
+        .message.user .message-avatar {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+        }
+
+        .message.ai .message-content {
+            background: var(--card-bg);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user .message-content {
+            background: var(--primary-color);
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .chat-send-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-bg);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h4 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-visual {
+                height: 200px;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .transfer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .transfer-arrow {
+                transform: rotate(90deg);
+            }
+
+            .connections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sync-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-music"></i>
+                AI Music Hub
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#connections">Connections</a></li>
+                    <li><a href="#discover">Discover</a></li>
+                    <li><a href="#transfer">Transfer</a></li>
+                    <li><a href="#ai-assistant">AI Assistant</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+                <div class="user-avatar">
+                    <img src="https://picsum.photos/seed/user123/100/100.jpg" alt="User Avatar">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Connect All Your Music</h1>
+                <p>Seamlessly integrate with Spotify, Apple Music, YouTube Music, and more. Experience unified music discovery powered by AI across all your favorite platforms.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-link"></i>
+                        Connect Platforms
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-exchange-alt"></i>
+                        Transfer Playlists
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="platform-icons">
+                    <div class="platform-icon spotify">
+                        <i class="fab fa-spotify"></i>
+                    </div>
+                    <div class="platform-icon apple">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <div class="platform-icon youtube">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="platform-icon soundcloud">
+                        <i class="fab fa-soundcloud"></i>
+                    </div>
+                    <div class="platform-icon tidal">
+                        <i class="fas fa-water"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Connections Section -->
+    <section class="platform-connections" id="connections">
+        <div class="section-header">
+            <h2>Connected Platforms</h2>
+            <p>Link your music streaming accounts to sync playlists, favorites, and listening history</p>
+        </div>
+        
+        <div class="connections-grid">
+            <div class="connection-card connected" data-platform="spotify">
+                <div class="connection-header">
+                    <div class="connection-info">
+                        <div class="connection-logo spotify">
+                            <i class="fab fa-spotify"></i>
+                        </div>
+                        <div class="connection-name">
+                            <h3>Spotify</h3>
+                            <p>john.doe@email.com</p>
+                        </div>
+                    </div>
+                    <div class="connection-status">
+                        <span class="status-dot connected"></span>
+                        <span>Connected</span>
+                    </div>
+                </div>
+                <div class="connection-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Sync playlists (24)</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Import liked songs (342)</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Real-time sync enabled</span>
+                    </div>
+                </div>
+                <div class="connection-actions">
+                    <button class="btn-connect disconnect" onclick="toggleConnection('spotify')">
+                        <i class="fas fa-unlink"></i> Disconnect
+                    </button>
+                    <button class="btn-connect connect" onclick="syncPlatform('spotify')">
+                        <i class="fas fa-sync"></i> Sync Now
+                    </button>
+                </div>
+            </div>
+
+            <div class="connection-card" data-platform="apple">
+                <div class="connection-header">
+                    <div class="connection-info">
+                        <div class="connection-logo apple">
+                            <i class="fab fa-apple"></i>
+                        </div>
+                        <div class="connection-name">
+                            <h3>Apple Music</h3>
+                            <p>Not connected</p>
+                        </div>
+                    </div>
+                    <div class="connection-status">
+                        <span class="status-dot"></span>
+                        <span>Disconnected</span>
+                    </div>
+                </div>
+                <div class="connection-features">
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Sync playlists</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Import library</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Real-time sync</span>
+                    </div>
+                </div>
+                <div class="connection-actions">
+                    <button class="btn-connect connect" onclick="toggleConnection('apple')">
+                        <i class="fas fa-link"></i> Connect
+                    </button>
+                </div>
+            </div>
+
+            <div class="connection-card connected" data-platform="youtube">
+                <div class="connection-header">
+                    <div class="connection-info">
+                        <div class="connection-logo youtube">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div class="connection-name">
+                            <h3>YouTube Music</h3>
+                            <p>john.doe@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="connection-status">
+                        <span class="status-dot connected"></span>
+                        <span>Connected</span>
+                    </div>
+                </div>
+                <div class="connection-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Sync playlists (12)</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Upload library</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Auto-sync weekly</span>
+                    </div>
+                </div>
+                <div class="connection-actions">
+                    <button class="btn-connect disconnect" onclick="toggleConnection('youtube')">
+                        <i class="fas fa-unlink"></i> Disconnect
+                    </button>
+                    <button class="btn-connect connect" onclick="syncPlatform('youtube')">
+                        <i class="fas fa-sync"></i> Sync Now
+                    </button>
+                </div>
+            </div>
+
+            <div class="connection-card" data-platform="soundcloud">
+                <div class="connection-header">
+                    <div class="connection-info">
+                        <div class="connection-logo soundcloud">
+                            <i class="fab fa-soundcloud"></i>
+                        </div>
+                        <div class="connection-name">
+                            <h3>SoundCloud</h3>
+                            <p>Not connected</p>
+                        </div>
+                    </div>
+                    <div class="connection-status">
+                        <span class="status-dot"></span>
+                        <span>Disconnected</span>
+                    </div>
+                </div>
+                <div class="connection-features">
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Sync likes</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Import playlists</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Discover underground</span>
+                    </div>
+                </div>
+                <div class="connection-actions">
+                    <button class="btn-connect connect" onclick="toggleConnection('soundcloud')">
+                        <i class="fas fa-link"></i> Connect
+                    </button>
+                </div>
+            </div>
+
+            <div class="connection-card" data-platform="tidal">
+                <div class="connection-header">
+                    <div class="connection-info">
+                        <div class="connection-logo tidal">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div class="connection-name">
+                            <h3>Tidal</h3>
+                            <p>Not connected</p>
+                        </div>
+                    </div>
+                    <div class="connection-status">
+                        <span class="status-dot"></span>
+                        <span>Disconnected</span>
+                    </div>
+                </div>
+                <div class="connection-features">
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Hi-Res audio sync</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Mix playlists</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Artist exclusives</span>
+                    </div>
+                </div>
+                <div class="connection-actions">
+                    <button class="btn-connect connect" onclick="toggleConnection('tidal')">
+                        <i class="fas fa-link"></i> Connect
+                    </button>
+                </div>
+            </div>
+
+            <div class="connection-card" data-platform="deezer">
+                <div class="connection-header">
+                    <div class="connection-info">
+                        <div class="connection-logo" style="background: linear-gradient(135deg, #ff6b00, #ff8c00);">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <div class="connection-name">
+                            <h3>Deezer</h3>
+                            <p>Not connected</p>
+                        </div>
+                    </div>
+                    <div class="connection-status">
+                        <span class="status-dot"></span>
+                        <span>Disconnected</span>
+                    </div>
+                </div>
+                <div class="connection-features">
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Flow integration</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Lyrics sync</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-circle"></i>
+                        <span>Podcast support</span>
+                    </div>
+                </div>
+                <div class="connection-actions">
+                    <button class="btn-connect connect" onclick="toggleConnection('deezer')">
+                        <i class="fas fa-link"></i> Connect
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sync Dashboard -->
+        <div class="sync-dashboard">
+            <div class="sync-header">
+                <h3>
+                    <i class="fas fa-sync-alt"></i>
+                    Sync Dashboard
+                </h3>
+                <div class="sync-status">
+                    <i class="fas fa-check-circle"></i>
+                    All platforms synced
+                </div>
+            </div>
+            <div class="sync-stats">
+                <div class="stat-card">
+                    <div class="stat-value">1,247</div>
+                    <div class="stat-label">Total Songs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">36</div>
+                    <div class="stat-label">Playlists</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Connected Platforms</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24h</div>
+                    <div class="stat-label">Last Sync</div>
+                </div>
+            </div>
+            <div class="sync-actions">
+                <button class="btn btn-primary">
+                    <i class="fas fa-sync"></i>
+                    Sync All Platforms
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-cog"></i>
+                    Sync Settings
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Import/Export Section -->
+    <section class="import-export" id="transfer">
+        <div class="import-export-container">
+            <div class="section-header">
+                <h2>Transfer Playlists</h2>
+                <p>Move your playlists between different music platforms seamlessly</p>
+            </div>
+            
+            <div class="transfer-grid">
+                <div class="transfer-box" id="sourceBox">
+                    <div class="transfer-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="transfer-title">From</div>
+                    <div class="transfer-description">Select the source platform</div>
+                    <select class="platform-select" id="sourcePlatform">
+                        <option value="">Choose platform...</option>
+                        <option value="spotify">Spotify</option>
+                        <option value="apple">Apple Music</option>
+                        <option value="youtube">YouTube Music</option>
+                        <option value="soundcloud">SoundCloud</option>
+                        <option value="tidal">Tidal</option>
+                        <option value="deezer">Deezer</option>
+                    </select>
+                    <div id="sourcePlaylists" style="display: none;">
+                        <h4 style="margin-bottom: 1rem;">Select Playlists</h4>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            <label style="display: block; margin-bottom: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" value="1"> Summer Vibes (24 songs)
+                            </label>
+                            <label style="display: block; margin-bottom: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" value="2"> Workout Mix (32 songs)
+                            </label>
+                            <label style="display: block; margin-bottom: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" value="3"> Chill Evening (18 songs)
+                            </label>
+                            <label style="display: block; margin-bottom: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" value="4"> Road Trip (45 songs)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="transfer-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <div class="transfer-box" id="targetBox">
+                    <div class="transfer-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <div class="transfer-title">To</div>
+                    <div class="transfer-description">Select the target platform</div>
+                    <select class="platform-select" id="targetPlatform">
+                        <option value="">Choose platform...</option>
+                        <option value="spotify">Spotify</option>
+                        <option value="apple">Apple Music</option>
+                        <option value="youtube">YouTube Music</option>
+                        <option value="soundcloud">SoundCloud</option>
+                        <option value="tidal">Tidal</option>
+                        <option value="deezer">Deezer</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="transferPlaylists()">
+                    <i class="fas fa-exchange-alt"></i>
+                    Transfer Selected Playlists
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Music Discovery Section -->
+    <section class="music-discovery" id="discover">
+        <div class="section-header">
+            <h2>Unified Music Discovery</h2>
+            <p>Explore music from all your connected platforms in one place</p>
+        </div>
+        
+        <div class="discovery-tabs">
+            <button class="tab active" data-tab="all">All Platforms</button>
+            <button class="tab" data-tab="spotify">Spotify</button>
+            <button class="tab" data-tab="apple">Apple Music</button>
+            <button class="tab" data-tab="youtube">YouTube Music</button>
+            <button class="tab" data-tab="recommendations">AI Recommendations</button>
+        </div>
+        
+        <div class="tab-content active" id="all">
+            <div class="music-grid">
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/album1/300/300.jpg'); position: relative;">
+                        <div class="platform-badge spotify">
+                            <i class="fab fa-spotify"></i> Spotify
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Electric Dreams</div>
+                        <div class="music-card-artist">Synthwave Collective</div>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/album2/300/300.jpg'); position: relative;">
+                        <div class="platform-badge youtube">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Midnight Jazz</div>
+                        <div class="music-card-artist">The Blue Notes</div>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/album3/300/300.jpg'); position: relative;">
+                        <div class="platform-badge spotify">
+                            <i class="fab fa-spotify"></i> Spotify
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Summer Vibes</div>
+                        <div class="music-card-artist">Beach House</div>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/album4/300/300.jpg'); position: relative;">
+                        <div class="platform-badge apple">
+                            <i class="fab fa-apple"></i> Apple
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Urban Symphony</div>
+                        <div class="music-card-artist">City Lights</div>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/album5/300/300.jpg'); position: relative;">
+                        <div class="platform-badge youtube">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Cosmic Journey</div>
+                        <div class="music-card-artist">Space Odyssey</div>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/album6/300/300.jpg'); position: relative;">
+                        <div class="platform-badge spotify">
+                            <i class="fab fa-spotify"></i> Spotify
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Acoustic Sessions</div>
+                        <div class="music-card-artist">Unplugged</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="spotify">
+            <div class="music-grid">
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/spotify1/300/300.jpg'); position: relative;">
+                        <div class="platform-badge spotify">
+                            <i class="fab fa-spotify"></i> Spotify
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Discover Weekly</div>
+                        <div class="music-card-artist">Your Mix</div>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/spotify2/300/300.jpg'); position: relative;">
+                        <div class="platform-badge spotify">
+                            <i class="fab fa-spotify"></i> Spotify
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Release Radar</div>
+                        <div class="music-card-artist">New Music</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="recommendations">
+            <div class="music-grid">
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/ai1/300/300.jpg'); position: relative;">
+                        <div class="platform-badge" style="background: var(--gradient);">
+                            <i class="fas fa-robot"></i> AI Pick
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">AI Generated Mix</div>
+                        <div class="music-card-artist">Based on your taste</div>
+                    </div>
+                </div>
+                <div class="music-card">
+                    <div class="music-card-image" style="background-image: url('https://picsum.photos/seed/ai2/300/300.jpg'); position: relative;">
+                        <div class="platform-badge" style="background: var(--gradient);">
+                            <i class="fas fa-robot"></i> AI Pick
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="music-card-info">
+                        <div class="music-card-title">Similar Artists</div>
+                        <div class="music-card-artist">You might like</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Assistant Section -->
+    <section class="ai-assistant" id="ai-assistant">
+        <div class="assistant-header">
+            <h2>AI Music Assistant</h2>
+            <div class="ai-badge">
+                <i class="fas fa-sparkles"></i>
+                Powered by OpenAI
+            </div>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        Hello! I can help you manage your music across all platforms. Try asking me to sync playlists, find songs, or transfer music between services.
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ask me about syncing, transferring, or discovering music...">
+                <button class="chat-send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h4>Platform Integrations</h4>
+                <ul>
+                    <li><a href="#">Spotify API</a></li>
+                    <li><a href="#">Apple Music API</a></li>
+                    <li><a href="#">YouTube Music API</a></li>
+                    <li><a href="#">SoundCloud API</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Features</h4>
+                <ul>
+                    <li><a href="#">Playlist Transfer</a></li>
+                    <li><a href="#">Auto Sync</a></li>
+                    <li><a href="#">AI Recommendations</a></li>
+                    <li><a href="#">Cross-Platform Search</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">API Documentation</a></li>
+                    <li><a href="#">Community Forum</a></li>
+                    <li><a href="#">Contact Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Connect</h4>
+                <p>Follow us for updates</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 AI Music Hub. All rights reserved. Integrated with major music platforms.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const contentId = tab.dataset.tab;
+                const content = document.getElementById(contentId);
+                if (content) {
+                    content.classList.add('active');
+                }
+            });
+        });
+
+        // Platform connection toggle
+        function toggleConnection(platform) {
+            const card = document.querySelector(`[data-platform="${platform}"]`);
+            const statusDot = card.querySelector('.status-dot');
+            const statusText = card.querySelector('.connection-status span:last-child');
+            const emailText = card.querySelector('.connection-name p');
+            const features = card.querySelectorAll('.feature-item i');
+            const actions = card.querySelector('.connection-actions');
+            
+            if (card.classList.contains('connected')) {
+                // Disconnect
+                card.classList.remove('connected');
+                statusDot.classList.remove('connected');
+                statusText.textContent = 'Disconnected';
+                emailText.textContent = 'Not connected';
+                features.forEach(icon => {
+                    icon.className = 'fas fa-circle';
+                });
+                actions.innerHTML = `
+                    <button class="btn-connect connect" onclick="toggleConnection('${platform}')">
+                        <i class="fas fa-link"></i> Connect
+                    </button>
+                `;
+            } else {
+                // Connect
+                card.classList.add('connected');
+                statusDot.classList.add('connected');
+                statusText.textContent = 'Connected';
+                emailText.textContent = 'user@example.com';
+                features.forEach(icon => {
+                    icon.className = 'fas fa-check-circle';
+                });
+                actions.innerHTML = `
+                    <button class="btn-connect disconnect" onclick="toggleConnection('${platform}')">
+                        <i class="fas fa-unlink"></i> Disconnect
+                    </button>
+                    <button class="btn-connect connect" onclick="syncPlatform('${platform}')">
+                        <i class="fas fa-sync"></i> Sync Now
+                    </button>
+                `;
+            }
+        }
+
+        // Sync platform
+        function syncPlatform(platform) {
+            const syncStatus = document.querySelector('.sync-status');
+            syncStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+            
+            setTimeout(() => {
+                syncStatus.innerHTML = '<i class="fas fa-check-circle"></i> Sync complete!';
+                setTimeout(() => {
+                    syncStatus.innerHTML = '<i class="fas fa-check-circle"></i> All platforms synced';
+                }, 2000);
+            }, 2000);
+        }
+
+        // Transfer functionality
+        document.getElementById('sourcePlatform').addEventListener('change', function() {
+            const sourceBox = document.getElementById('sourceBox');
+            const sourcePlaylists = document.getElementById('sourcePlaylists');
+            
+            if (this.value) {
+                sourceBox.classList.add('active');
+                sourcePlaylists.style.display = 'block';
+            } else {
+                sourceBox.classList.remove('active');
+                sourcePlaylists.style.display = 'none';
+            }
+        });
+
+        document.getElementById('targetPlatform').addEventListener('change', function() {
+            const targetBox = document.getElementById('targetBox');
+            
+            if (this.value) {
+                targetBox.classList.add('active');
+            } else {
+                targetBox.classList.remove('active');
+            }
+        });
+
+        function transferPlaylists() {
+            const source = document.getElementById('sourcePlatform').value;
+            const target = document.getElementById('targetPlatform').value;
+            const selectedPlaylists = document.querySelectorAll('#sourcePlaylists input[type="checkbox"]:checked');
+            
+            if (!source || !target) {
+                alert('Please select both source and target platforms');
+                return;
+            }
+            
+            if (selectedPlaylists.length === 0) {
+                alert('Please select at least one playlist to transfer');
+                return;
+            }
+            
+            // Simulate transfer
+            const btn = event.target;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Transferring...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Transfer Complete!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-exchange-alt"></i> Transfer Selected Playlists';
+                    btn.disabled = false;
+                    // Reset selections
+                    document.getElementById('sourcePlatform').value = '';
+                    document.getElementById('targetPlatform').value = '';
+                    document.getElementById('sourceBox').classList.remove('active');
+                    document.getElementById('targetBox').classList.remove('active');
+                    document.getElementById('sourcePlaylists').style.display = 'none';
+                    document.querySelectorAll('#sourcePlaylists input[type="checkbox"]').forEach(cb => cb.checked = false);
+                }, 2000);
+            }, 3000);
+        }
+
+        // Chat functionality
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+
+        const aiResponses = [
+            "I can help you sync your playlists across platforms. Which platforms would you like to connect?",
+            "Your Spotify and YouTube Music accounts are already synced. Would you like to add Apple Music?",
+            "I found 3 playlists that can be transferred. Would you like me to proceed with the transfer?",
+            "Based on your listening history across platforms, I recommend checking out artists similar to your favorites.",
+            "I can create a unified playlist combining your favorites from all connected platforms. Shall I proceed?"
+        ];
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.innerHTML = isUser ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = content;
+            
+            messageDiv.appendChild(avatarDiv);
+            messageDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+                
+                setTimeout(() => {
+                    const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+                    addMessage(randomResponse);
+                }, 1000);
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(15, 23, 42, 0.95)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.background = 'linear-gradient(to bottom, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7))';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Platform icon hover effects
+        document.querySelectorAll('.platform-icon').forEach(icon => {
+            icon.addEventListener('click', () => {
+                const platform = icon.classList[1];
+                const card = document.querySelector(`[data-platform="${platform}"]`);
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.style.animation = 'pulse 0.5s ease';
+                    setTimeout(() => {
+                        card.style.animation = '';
+                    }, 500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
